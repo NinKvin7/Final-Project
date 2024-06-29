@@ -1,0 +1,26 @@
+{%extends 'Main.html'%}
+
+{% block title %}
+    <title> HOME PAGE </title>
+{% endblock %}
+
+{% block content %}
+    <hr>
+    <h3> Movies </h3>
+    <hr>
+
+<div style = "display: flex;" >
+    {% for movie in movies %}
+        <div class="card" style="width: 18rem; margin-left: 2%; ">
+          <img src="{{ movie.picture }}" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">{{ movie.name }}  {{ movie.year }}</h5>
+              <h6 class="card-title">{{ movie.rate }}</h6>
+            <p class="card-text">{{ movie.description | slice:":200"}}.</p>
+            <a href="#" class="btn btn-primary">Open</a>
+          </div>
+        </div>
+    {% endfor%}
+</div>
+
+{% endblock %}
