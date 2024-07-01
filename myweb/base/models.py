@@ -49,4 +49,4 @@ class Movie(models.Model):
 
 
 class User(AbstractUser):
-    movies = models.ManyToManyField(Movie, related_name='movies', blank=True)
+    movies = models.ManyToManyField(Movie, related_name='users', blank=True)
