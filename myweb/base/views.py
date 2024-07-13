@@ -14,7 +14,7 @@ from django.contrib import messages
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
     movies = Movie.objects.filter(Q(name__icontains=q) | Q(description__icontains=q) | Q(actor__name__icontains=q) | Q(genre__name__icontains=q) )
-    movies = list(set(movies))
+    movies = list(dict.fromkeys(movies))
     # movies = Movie.objects.all()
     heading = " Movies "
     genres = Genre.objects.all()

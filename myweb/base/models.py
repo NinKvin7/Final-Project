@@ -31,7 +31,9 @@ class Genre(models.Model):
 
 
 class Movie(models.Model):
-    picture =  models.ImageField(null=True, blank=True)
+    creator = models.ForeignKey('User', on_delete=models.SET("Unknown Creator"))
+
+    picture = models.ImageField(null=True, blank=True)
     name = models.CharField(max_length=70)
     rate = models.FloatField()
     year = models.IntegerField()
@@ -43,6 +45,12 @@ class Movie(models.Model):
     description = models.CharField(max_length=1200)
     trailer = models.CharField(max_length=1000)
     file = models.FileField(null=True)
+
+    created = models.DateTimeField(auto_now_add=True)
+    update = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["name"]
 
     def __str__(self):
         return f"{self.name} ({self.year})"
