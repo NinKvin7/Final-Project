@@ -6,11 +6,12 @@ urlpatterns = [
     path('about', views.about, name='about'),
     path('profile/<str:pk>', views.profile, name='profile'),
     path('adding/<str:id>', views.adding, name='adding'),
-    path('delete/<str:id>', views.delete, name='delete'),
+    path('delete/<str:id>', views.delete, name='drop'),
     path('login/', views.login_user, name='login'),
     path('logout/', views.logout_user, name='logout'),
     path('register/', views.register_user, name='register'),
     path('add/', views.add_movie, name='add'),
-    path('watching/<str:id>', views.watching, name='watching')
+    path('watching/<str:id>', views.watching, name='watching'),
+    path('delete_movie/<str:id>', views.delete_movie, name='delete')
 
 ]

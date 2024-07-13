@@ -5,14 +5,15 @@ from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .forms import MyUserCreationForm, MovieForm
-# from .seeder import seeder_func
+from .seeder import seeder_func
 from django.contrib import messages
 
-# Create your views here.
+
 
 
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
+    seeder_func()
     movies = Movie.objects.filter(Q(name__icontains=q) | Q(description__icontains=q) | Q(actor__name__icontains=q) | Q(genre__name__icontains=q) )
     movies = list(dict.fromkeys(movies))
     # movies = Movie.objects.all()
@@ -64,7 +65,7 @@ def login_user(request):
         try:
             user = User.objects.get(username=username)
         except:
-            pass
+            messages.error(request, 'User does not exist!')
 
         user = authenticate(request, username=username, password=password)
 
@@ -72,7 +73,7 @@ def login_user(request):
             login(request, user)
             return redirect('profile', request.user.id)
         else:
-            pass
+            messages.error(request, 'User or Password is not correct!')
 
 
 
@@ -95,8 +96,7 @@ def register_user(request):
             return redirect('profile', user.id)
 
         else:
-            pass
-            # messages.error(request, 'Follow The Instructions and create proper user and password...')
+           messages.error(request, 'Follow The Instructions and create proper user and password...')
 
     context = {'form': form}
     return render(request, 'base/register.html', context)
@@ -124,7 +124,8 @@ def add_movie(request):
         new_movie = Movie(picture=request.FILES['picture'], name=form.data['name'], director=director,
                         description=form.data['description'], file=request.FILES['file'],
                         year = form.data['year'], rate=form.data['rate'],
-                        runtime=form.data['runtime'], trailer= form.data['trailer'])
+                        runtime=form.data['runtime'], trailer= form.data['trailer'],
+                        creator=request.user )
 
 
         new_movie.save()
@@ -142,3 +143,13 @@ def add_movie(request):
 def watching(request, id):
     movie = Movie.objects.get(id=id)
     return render(request, 'base/watching.html', {'movie': movie})
+
+def delete_movie(request, id):
+    obj = Movie.objects.get(id=id)
+
+    if request.method == "POST":
+        obj.picture.delete()
+        obj.file.delete()
+        obj.delete()
+        return redirect('home')
+    return render(request, 'base/delete.html', {'obj': obj})

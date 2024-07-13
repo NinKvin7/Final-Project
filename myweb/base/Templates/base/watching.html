@@ -17,7 +17,10 @@
 
     {% load static %}
 
-    <embed src="{% static movie.file.url %}" width="100%" height="1000px" scrolling="auto"/>
+<!--    <embed src="{% static movie.file.url %}" width="100%" height="1000px" scrolling="auto"/>-->
+    <video width="100%" height="auto" controls>
+      <source src="{% static movie.file.url %}" type="video/x-matroska">
+    </video>
 
 
 {% endblock %}

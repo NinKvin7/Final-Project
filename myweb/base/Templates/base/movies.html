@@ -50,9 +50,13 @@
                           <a href="{% url 'watching' movie.id %}" class="btn btn-primary">Watch</a>
 
                           {% if movie in request.user.movies.all %}
-                          <a href="{%  url 'delete' movie.id %}" class="btn btn-primary">Delete</a>
+                          <a href="{%  url 'drop' movie.id %}" class="btn btn-primary">Drop</a>
                           {% else %}
                           <a href="{%  url 'adding' movie.id %}" class="btn btn-primary">Add</a>
+                          {% endif %}
+
+                          {% if request.user == movie.creator %}
+                               <a href="{% url 'delete' movie.id %}" class="btn btn-primary">Delete</a>
                           {% endif %}
                       {% endif %}
 
