@@ -29,11 +29,14 @@
         <hr>
             <h3> {{ heading }} </h3>
         <hr>
+        <br>
+         <a href="{% url 'add' %}">Add Movie</a>
+        <br><br>
 
         <div style = "display: flex;" >
             {% for movie in movies %}
                 <div class="card" style="width: 18rem; margin-left: 2%; ">
-                  <img src="{{ movie.picture }}" class="card-img-top" alt="...">
+                  <img src="{{ movie.picture.url }}" class="card-img-top" alt="...">
                   <div class="card-body">
                     <h5 class="card-title">{{ movie.name }}  {{ movie.year }}</h5>
                       <h6 class="card-title">{{ movie.rate }}</h6>

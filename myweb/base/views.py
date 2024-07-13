@@ -1,9 +1,12 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import Movie, User, Genre
+from .models import Movie, User, Genre, Director, Actor, Country
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from .forms import MyUserCreationForm, MovieForm
+# from .seeder import seeder_func
+from django.contrib import messages
 
 # Create your views here.
 
@@ -78,3 +81,60 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     return redirect('home')
+
+def register_user(request):
+    form = MyUserCreationForm()
+
+    if request.method == 'POST':
+        form = MyUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.username = user.username.lower()
+            user.save()
+            login(request, user)
+            return redirect('profile', user.id)
+
+        else:
+            pass
+            # messages.error(request, 'Follow The Instructions and create proper user and password...')
+
+    context = {'form': form}
+    return render(request, 'base/register.html', context)
+
+def add_movie(request):
+    directors = Director.objects.all()
+    actors = Actor.objects.all()
+    genres = Genre.objects.all()
+    countries = Country.objects.all()
+    form = MovieForm()
+
+    if request.method == 'POST':
+        movie_director = request.POST.get('director')
+        movie_actor = request.POST.get('actor')
+        movie_genre = request.POST.get('genre')
+        movie_country = request.POST.get('country')
+
+        director, created = Director.objects.get_or_create(name=movie_director)
+        actor, created = Actor.objects.get_or_create(name=movie_actor)
+        genre, created = Genre.objects.get_or_create(name=movie_genre)
+        country, created = Country.objects.get_or_create(name=movie_country)
+
+        form = MovieForm(request.POST)
+
+        new_movie = Movie(picture=request.FILES['picture'], name=form.data['name'], director=director,
+                        description=form.data['description'], file=request.FILES['file'],
+                        year = form.data['year'], rate=form.data['rate'],
+                        runtime=form.data['runtime'], trailer= form.data['trailer'])
+
+
+        new_movie.save()
+        new_movie.actor.add(actor)
+        new_movie.genre.add(genre)
+        new_movie.country.add(country)
+
+        return redirect('home')
+
+
+
+    context = {'form': form, 'directors': directors, 'actors':actors, 'genres': genres, 'countries': countries}
+    return render(request, 'base/add_movie.html', context)
