@@ -1,0 +1,23 @@
+{%extends 'Main.html'%}
+
+{% block title %}
+    <title> Watching Page </title>
+{% endblock %}  --მაუსს რომ მიუახლოვებ, მაშინ ჩანს
+
+
+{% block content %}
+    <h2> {{ movie.name }} </h2>
+    <h3> {{ movie.year}}   {{ movie.rate }}</h3>
+    <h3>
+        {% for genre in movie.genre.all %}
+            {{ genre }},
+        {% endfor %}
+    </h3>
+    <p> {{movie.description }}</p>
+
+    {% load static %}
+
+    <embed src="{% static movie.file.url %}" width="100%" height="1000px" scrolling="auto"/>
+
+
+{% endblock %}

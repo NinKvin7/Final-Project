@@ -2,11 +2,15 @@
 <style>
     .home-container {
     display: grid;
-    grid-template-columns: 1fr 5.5fr;
+    grid-template-columns: 1fr 10fr;
     }
 
     .genre {
-    margin: 1px 14px
+    margin: 1px 15px
+    }
+
+    .row{
+        display: flex;
     }
 
 </style>
@@ -33,17 +37,17 @@
          <a href="{% url 'add' %}">Add Movie</a>
         <br><br>
 
-        <div style = "display: flex;" >
+        <div class="row" >
             {% for movie in movies %}
-                <div class="card" style="width: 18rem; margin-left: 2%; ">
+                <div class="card" style="width: 17rem; margin-left: 1%; ">
                   <img src="{{ movie.picture.url }}" class="card-img-top" alt="...">
                   <div class="card-body">
-                    <h5 class="card-title">{{ movie.name }}  {{ movie.year }}</h5>
+                    <h5 class="card-title">{{ movie.name }}  {{ movie.year }} Id {{movie.id}}</h5>
                       <h6 class="card-title">{{ movie.rate }}</h6>
                     <p class="card-text">{{ movie.description | slice:":200"}}.</p>
 
                       {% if request.user.is_authenticated %}
-                          <a href="#" class="btn btn-primary">Watch</a>
+                          <a href="{% url 'watching' movie.id %}" class="btn btn-primary">Watch</a>
 
                           {% if movie in request.user.movies.all %}
                           <a href="{%  url 'delete' movie.id %}" class="btn btn-primary">Delete</a>

@@ -138,3 +138,7 @@ def add_movie(request):
 
     context = {'form': form, 'directors': directors, 'actors':actors, 'genres': genres, 'countries': countries}
     return render(request, 'base/add_movie.html', context)
+
+def watching(request, id):
+    movie = Movie.objects.get(id=id)
+    return render(request, 'base/watching.html', {'movie': movie})
